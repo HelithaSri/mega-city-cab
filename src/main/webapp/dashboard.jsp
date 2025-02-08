@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
     String adminUser = (String) session.getAttribute("user");
     if (adminUser == null) {
         response.sendRedirect("index.jsp"); // Redirect to login if not logged in
