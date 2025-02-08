@@ -1,6 +1,6 @@
 plugins {
-    id 'java'
     id 'war'
+    id 'java'
 }
 
 group 'lk.cab.manager'
@@ -34,4 +34,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+war {
+    archiveFileName = "app.war"
 }
