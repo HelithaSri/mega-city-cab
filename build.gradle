@@ -21,6 +21,10 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+task stage {
+    dependsOn build
+}
+
 dependencies {
     compileOnly('jakarta.servlet:jakarta.servlet-api:6.0.0')
 
