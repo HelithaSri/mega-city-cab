@@ -1,28 +1,17 @@
 package lk.cab.manager.megacitycab.config;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-
 
 public class DbConnection {
     // Singleton instance
     private static DbConnection instance;
-    private final DataSource dataSource;
 
-    // Private constructor to enforce Singleton pattern
-    private DbConnection() {
-        try {
-            // Look up the DataSource from JNDI
-            Context context = new InitialContext();
-            dataSource = (DataSource) context.lookup("java:comp/env/jdbc/CabServiceDB");
-        } catch (NamingException e) {
-            throw new RuntimeException("Failed to lookup DataSource from JNDI", e);
-        }
-    }
+    // Get DATABASE_URL from environment variable
+    private static final String DATABASE_URL = System.getenv("ICBT_DATABASE_URL");
+
+    private DbConnection() {}
 
     // Singleton instance getter
     public static DbConnection getInstance() {
@@ -38,6 +27,9 @@ public class DbConnection {
 
     // Get a database connection
     public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        if (DATABASE_URL == null || DATABASE_URL.isEmpty()) {
+            throw new SQLException("DATABASE_URL is not set in environment variables");
+        }
+        return DriverManager.getConnection(DATABASE_URL);
     }
 }
