@@ -3,6 +3,8 @@ plugins {
     id 'java'
 }
 
+apply plugin: 'war'
+
 group 'lk.cab.manager'
 version '1.0-SNAPSHOT'
 
@@ -31,7 +33,14 @@ dependencies {
     // https://mvnrepository.com/artifact/com.mysql/mysql-connector-j
     implementation group: 'com.mysql', name: 'mysql-connector-j', version: '9.1.0'
 
-    implementation 'com.heroku:webapp-runner:9.0.52.0'
+    // https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-servlet-api
+//    implementation group: 'org.apache.tomcat', name: 'tomcat-servlet-api', version: '11.0.2'
+
+//    compileOnly group: 'com.github.jsimone', name: 'webapp-runner', version: '9.0.78'
+
+    // https://mvnrepository.com/artifact/com.heroku/webapp-runner
+    implementation group: 'com.heroku', name: 'webapp-runner', version: '10.1.34.0'
+
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
@@ -41,6 +50,21 @@ test {
     useJUnitPlatform()
 }
 
+task copyWebAppRunner(type: Copy) {
+    // Improved find method to handle nulls and empty collections
+    def webappRunnerJar = configurations.runtimeClasspath.find { it.name.startsWith('webapp-runner') }
+
+    if (webappRunnerJar != null) { // Check if found
+        from webappRunnerJar
+        into "$buildDir/webapp-runner"
+    } else {
+        println "WARNING: webapp-runner.jar not found in runtimeClasspath.  Build might fail on Heroku."
+        // You might consider throwing an exception here to halt the build if webapp-runner is crucial.
+        // throw new GradleException("webapp-runner.jar not found.")
+    }
+
+}
+
 war {
-    archiveFileName = "app.war"
+    dependsOn copyWebAppRunner // Make the war task depend on copying the webapp-runner
 }
