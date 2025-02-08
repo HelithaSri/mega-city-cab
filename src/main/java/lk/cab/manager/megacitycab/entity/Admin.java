@@ -1,24 +1,24 @@
 package lk.cab.manager.megacitycab.entity;
 
 public class Admin {
-    private String adminId;
+    private int adminId;
     private String username;
     private String password;
 
     public Admin() {
     }
 
-    public Admin(String adminId, String username, String password) {
+    public Admin(int adminId, String username, String password) {
         this.adminId = adminId;
         this.username = username;
         this.password = password;
     }
 
-    public String getAdminId() {
+    public int getAdminId() {
         return adminId;
     }
 
-    public void setAdminId(String adminId) {
+    public void setAdminId(int adminId) {
         this.adminId = adminId;
     }
 
