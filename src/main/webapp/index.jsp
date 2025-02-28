@@ -79,11 +79,13 @@
 <body>
 <div class="login-container">
     <div class="login-header">
+        <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo"
+             style="width: 150px; height: auto;">
         <h1>Mega City Cab Admin</h1>
         <h2>Login</h2>
     </div>
 
-    <form action="login" method="post">
+    <form action="auth/login" method="post">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>

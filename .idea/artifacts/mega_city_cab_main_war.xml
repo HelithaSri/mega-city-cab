@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="mega-city-cab.main:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/mega_city_cab_main_war</output-path>
+    <root id="archive" name="mega-city-cab.main_war.war">
+      <element id="artifact" artifact-name="mega-city-cab.main:war exploded" />
+    </root>
+  </artifact>
+</component>

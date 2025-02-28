@@ -65,7 +65,7 @@
 
         <!-- Logout Button -->
         <div style="width: 200px; padding: 20px; background-color: #dc3545; color: white; border-radius: 8px; cursor: pointer;"
-             onclick="location.href='logout.jsp'">
+             onclick="location.href='index.jsp'">
             <h4>🚪 Logout</h4>
             <p>Exit the system safely</p>
         </div>
