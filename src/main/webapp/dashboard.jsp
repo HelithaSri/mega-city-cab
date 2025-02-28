@@ -2,12 +2,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+
     String adminUser = (String) session.getAttribute("user");
+
     if (adminUser == null) {
-        response.sendRedirect("index.jsp"); // Redirect to login if not logged in
+        response.sendRedirect("index.jsp");
+        return;
     }
 %>
+
 
 <html>
 <head>
@@ -19,7 +25,7 @@
 <div style="padding: 15px; background: white; justify-content: space-between; display: flex; box-shadow: 0 0 10px rgba(0,0,0,0.2); border-bottom: 8px;">
     <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo"
          style="width: 150px; height: auto;">
-    <h2 style="color: black; margin: 0;">Welcome, <%= (String) ((String) session.getAttribute("user")).toUpperCase()%>
+    <h2 style="color: black; margin: 0;">Welcome, <%= ((String) session.getAttribute("user")).toUpperCase()%>
         !</h2>
 </div>
 
@@ -65,7 +71,7 @@
 
         <!-- Logout Button -->
         <div style="width: 200px; padding: 20px; background-color: #dc3545; color: white; border-radius: 8px; cursor: pointer;"
-             onclick="location.href='logout.jsp'">
+             onclick="logout()">
             <h4>🚪 Logout</h4>
             <p>Exit the system safely</p>
         </div>
@@ -74,4 +80,20 @@
 </div>
 
 </body>
+
+<script>
+    function logout() {
+        fetch('${pageContext.request.contextPath}/auth/logout', { // Corrected endpoint
+        method: 'POST',
+        credentials: 'same-origin' // Ensure session cookies are sent
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirect to index.jsp
+        }
+    })
+    .catch(error => console.error('Logout failed:', error));
+}
+</script>
+
 </html>
