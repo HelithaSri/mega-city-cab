@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ResultSetMapper {
+public class CustomMapper {
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     // Generic method to map a ResultSet to an entity of type T

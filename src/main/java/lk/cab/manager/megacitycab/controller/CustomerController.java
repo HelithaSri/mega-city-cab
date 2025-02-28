@@ -8,9 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.cab.manager.megacitycab.model.CustomerDto;
 import lk.cab.manager.megacitycab.service.CustomerService;
-import lk.cab.manager.megacitycab.util.ResultSetMapper;
+import lk.cab.manager.megacitycab.util.CustomMapper;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,21 +41,20 @@ public class CustomerController extends HttpServlet {
         LOGGER.log(Level.INFO, () -> "Received POST request: " + pathInfo);
 
         try {
-            if ("/add".equals(pathInfo)) {
-                CustomerDto customerDto = ResultSetMapper.mapRequestToEntity(req, CustomerDto.class);
-                LOGGER.log(Level.INFO, () -> "Customer added request: " + customerDto.toString());
-                customerService.addCustomer(customerDto);
-                resp.sendRedirect(req.getContextPath() + "/customers");
-
-            } else if ("/delete".equals(pathInfo)) {
-                int customerId = Integer.parseInt(req.getParameter("id"));
-                LOGGER.log(Level.INFO, () -> "Customer deleted by ID" + customerId);
-                customerService.deleteCustomer(customerId);
-                resp.sendRedirect(req.getContextPath() + "/customers");
-
-            } else {
-                LOGGER.log(Level.WARNING, () -> "Invalid POST request received: {}" + pathInfo);
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid Endpoint");
+            switch (pathInfo) {
+                case "/add":
+                    add(req, resp);
+                    break;
+                case "/update":
+                    update(req, resp);
+                    break;
+                case "/delete":
+                    delete(req, resp);
+                    break;
+                default:
+                    LOGGER.log(Level.WARNING, () -> "Invalid POST request received: {}" + pathInfo);
+                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Endpoint not found");
+                    break;
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e, () -> "Error processing request" + pathInfo);
@@ -62,4 +62,27 @@ public class CustomerController extends HttpServlet {
         }
     }
 
+    private void add(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, SQLException {
+        CustomerDto customerDto = CustomMapper.mapRequestToEntity(req, CustomerDto.class);
+        LOGGER.log(Level.INFO, () -> "Customer added request: " + customerDto.toString());
+        customerService.addCustomer(customerDto);
+        resp.sendRedirect(req.getContextPath() + "/customer");
+    }
+
+    private void update(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, SQLException {
+        CustomerDto customerDto = CustomMapper.mapRequestToEntity(req, CustomerDto.class);
+        LOGGER.log(Level.INFO, () -> "Customer added request: " + customerDto.toString());
+        customerService.addCustomer(customerDto);
+        resp.sendRedirect(req.getContextPath() + "/customer");
+    }
+
+    private void delete(HttpServletRequest req, HttpServletResponse resp)
+            throws IOException, SQLException {
+        String customerId = req.getParameter("id");
+        LOGGER.log(Level.INFO, () -> "Customer deleted by ID: " + customerId);
+        customerService.deleteCustomer(customerId);
+        resp.sendRedirect(req.getContextPath() + "/customer");
+    }
 }

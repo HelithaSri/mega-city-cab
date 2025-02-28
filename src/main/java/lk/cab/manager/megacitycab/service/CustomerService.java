@@ -3,7 +3,11 @@ package lk.cab.manager.megacitycab.service;
 import lk.cab.manager.megacitycab.entity.Customer;
 import lk.cab.manager.megacitycab.model.CustomerDto;
 import lk.cab.manager.megacitycab.repository.CustomerRepository;
+import lk.cab.manager.megacitycab.util.IdGenerator;
+import lk.cab.manager.megacitycab.util.QueryUtil;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,11 +19,23 @@ public class CustomerService {
     CustomerRepository customerRepository = new CustomerRepository();
 
 
-    public void addCustomer(CustomerDto customerDto) {
-
+    public boolean addCustomer(CustomerDto dto) throws SQLException {
+        String lastId = IdGenerator.generateNextCustomerId(QueryUtil.FIND_LAST_CUSTOMER_ID, "c");
+        Customer customer = new Customer(
+                lastId,
+                dto.getName(),
+                dto.getAddress(),
+                dto.getNic(),
+                dto.getMobile(),
+                dto.getEmail(),
+                LocalDate.parse(dto.getDob())
+        );
+        return customerRepository.save(customer);
     }
 
-    public void deleteCustomer(int customerId) {
+    public void deleteCustomer(String customerId) throws SQLException {
+        Customer customer = customerRepository.findById(customerId);
+        customerRepository.delete(customer.getId());
     }
 
     public List<CustomerDto> getAllCustomers() {

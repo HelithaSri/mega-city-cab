@@ -11,8 +11,13 @@
 
     <%-- Link to the external CSS file --%>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/css/loader.css">
 </head>
 <body>
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
 
 <div class="header">
     <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo"
@@ -41,7 +46,7 @@
             boolean isEditMode = customerToEdit != null;
 
             // Set form action based on mode
-            String formAction = isEditMode ? "UpdateCustomerServlet" : "AddCustomerServlet";
+            String formAction = isEditMode ? "customer/update" : "customer/add";
             String formTitle = isEditMode ? "Edit Customer" : "Add New Customer";
             String buttonText = isEditMode ? "Update Customer" : "Add Customer";
             String buttonIcon = isEditMode ? "✏️" : "➕";
@@ -51,21 +56,22 @@
             <div class="card-title">
                 <span class="card-title-icon"><%= buttonIcon %></span> <%= formTitle %>
             </div>
-            <form action="<%= formAction %>" method="post" data-mode="<%= isEditMode ? "edit" : "add" %>">
+            <form action="<%= formAction %>" method="post" data-mode="<%= isEditMode ? "edit" : "add" %>"
+                  autocomplete="off">
                 <div class="form-grid">
                     <div>
                         <div class="form-group">
-                            <label for="firstName" class="form-label">First Name</label>
-                            <input type="text" id="firstName" name="firstName" class="form-control"
-                                   placeholder="First Name" required
+                            <label for="name" class="form-label">First Name</label>
+                            <input type="text" id="name" name="name" class="form-control"
+                                   placeholder="Name" required
                                    value="<%= isEditMode ? customerToEdit.getName().split(" ")[0] : "" %>">
                         </div>
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label for="lastName" class="form-label">Last Name</label>
                             <input type="text" id="lastName" name="lastName" class="form-control"
                                    placeholder="Last Name" required
                                    value="<%= isEditMode ? (customerToEdit.getName().split(" ").length > 1 ? customerToEdit.getName().substring(customerToEdit.getName().indexOf(" ") + 1) : "") : "" %>">
-                        </div>
+                        </div>--%>
                         <div class="form-group">
                             <label for="nic" class="form-label">NIC</label>
                             <input type="text" id="nic" name="nic" class="form-control" placeholder="NIC" required
@@ -85,8 +91,8 @@
                                    value="<%= isEditMode ? customerToEdit.getAddress() : "" %>">
                         </div>
                         <div class="form-group">
-                            <label for="mobileNo" class="form-label">Mobile No</label>
-                            <input type="text" id="mobileNo" name="mobileNo" class="form-control"
+                            <label for="mobile" class="form-label">Mobile No</label>
+                            <input type="text" id="mobile" name="mobile" class="form-control"
                                    placeholder="Mobile No" required
                                    value="<%= isEditMode ? customerToEdit.getMobile() : "" %>">
                         </div>
@@ -157,8 +163,13 @@
                                                    '<%= customer.getMobile() %>',
                                                    '<%= customer.getEmail() %>',
                                                    '<%= customer.getDob() %>')">Edit</a>
-                            <a href="DeleteCustomerServlet?id=<%= customer.getId() %>" class="delete-link"
-                               onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>
+                            <%--<a href="customer/delete?id=<%= customer.getId() %>" class="delete-link"
+                               onclick="return confirm('Are you sure you want to delete this customer?')">Delete</a>--%>
+                            <form action="customer/delete" method="post" onsubmit="return confirmDelete()"
+                                  style="display:inline;">
+                                <input type="hidden" name="id" value="<%= customer.getId() %>">
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
                         </td>
                     </tr>
                     <%
@@ -182,7 +193,7 @@
         document.getElementById('customerId').value = id;
     } else {
         // Change form action and mode
-        form.action = 'UpdateCustomerServlet';
+        form.action = 'customer/update';
         form.setAttribute('data-mode', 'edit');
 
         // Add hidden customer ID field if not exists
@@ -202,13 +213,12 @@
     }
 
     // Update form fields
-    const nameParts = name.split(' ');
-    document.getElementById('firstName').value = nameParts[0];
-    document.getElementById('lastName').value = nameParts.slice(1).join(' ');
+    document.getElementById('name').value = name;
+    <%--    document.getElementById('lastName').value = nameParts.slice(1).join(' ');--%>
     document.getElementById('nic').value = nic;
     document.getElementById('dob').value = dob;
     document.getElementById('address').value = address;
-    document.getElementById('mobileNo').value = mobile;
+    document.getElementById('mobile').value = mobile;
     document.getElementById('email').value = email;
 
     // Scroll to the form smoothly
@@ -246,6 +256,16 @@
 
         submitBtn.parentNode.appendChild(resetBtn);
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const allForms = document.querySelectorAll("form");
+
+    allForms.forEach(function (form) {
+        form.addEventListener("submit", function () {
+            document.getElementById("loading-overlay").style.display = "flex";
+        });
+    });
+});
 </script>
 
 </body>
