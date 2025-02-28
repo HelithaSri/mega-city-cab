@@ -51,8 +51,8 @@ public class AuthController extends HttpServlet {
 
     private void logout(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        HttpSession session = req.getSession();
-        session.setAttribute("user", null);
+        HttpSession session = req.getSession(false);
+//        session.setAttribute("user", null);
         session.invalidate();
         resp.sendRedirect(req.getContextPath() + "/index.jsp");
     }
