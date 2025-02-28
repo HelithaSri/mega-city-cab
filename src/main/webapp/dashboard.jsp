@@ -59,6 +59,13 @@
         <!-- Booking Management -->
         <div style="width: 200px; padding: 20px; background-color: #007bff; color: white; border-radius: 8px; cursor: pointer;"
              onclick="location.href='customer'">
+            <h4>👥 Manage Customers</h4>
+            <p>View, Add, update & delete customers</p>
+        </div>
+
+        <!-- Booking Management -->
+        <div style="width: 200px; padding: 20px; background-color: rgba(255,213,0,0.8); color: white; border-radius: 8px; cursor: pointer;"
+             onclick="location.href='customer'">
             <h4>📖 Manage Bookings</h4>
             <p>View and update customer bookings</p>
         </div>
