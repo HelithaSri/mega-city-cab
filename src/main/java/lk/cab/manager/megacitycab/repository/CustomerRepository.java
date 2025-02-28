@@ -81,4 +81,13 @@ public class CustomerRepository {
         LOGGER.log(Level.INFO, () -> "Customer successfully delete!");
         return true;
     }
+
+    public void update(Customer customer) throws SQLException {
+        boolean executed = CrudUtil.executeUpdate(QueryUtil.UPDATE_CUSTOMER, customer.getName(), customer.getAddress(), customer.getNic(), customer.getMobile(), customer.getEmail(), customer.getDob(), customer.getId());
+        if (!executed) {
+            LOGGER.log(Level.WARNING, () -> "Failed to update customer");
+            return;
+        }
+        LOGGER.log(Level.INFO, () -> "Customer successfully updated!");
+    }
 }

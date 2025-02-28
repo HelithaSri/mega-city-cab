@@ -33,8 +33,30 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    public void updateCustomer(CustomerDto dto) throws SQLException {
+        Customer existingCustomer = customerRepository.findById(dto.getId());
+        if (existingCustomer == null) {
+            LOGGER.log(Level.WARNING, () -> "Customer not found by this ID: " + dto.getId());
+            return;
+        }
+        Customer customer = new Customer(
+                dto.getId(),
+                dto.getName(),
+                dto.getAddress(),
+                dto.getNic(),
+                dto.getMobile(),
+                dto.getEmail(),
+                LocalDate.parse(dto.getDob())
+        );
+        customerRepository.update(customer);
+    }
+
     public void deleteCustomer(String customerId) throws SQLException {
         Customer customer = customerRepository.findById(customerId);
+        if (customer == null) {
+            LOGGER.log(Level.WARNING, () -> "Customer not found by this ID: " + customerId);
+            return;
+        }
         customerRepository.delete(customer.getId());
     }
 

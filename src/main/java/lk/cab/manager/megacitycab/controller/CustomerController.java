@@ -73,8 +73,8 @@ public class CustomerController extends HttpServlet {
     private void update(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, SQLException {
         CustomerDto customerDto = CustomMapper.mapRequestToEntity(req, CustomerDto.class);
-        LOGGER.log(Level.INFO, () -> "Customer added request: " + customerDto.toString());
-        customerService.addCustomer(customerDto);
+        LOGGER.log(Level.INFO, () -> "Customer update request: " + customerDto.toString());
+        customerService.updateCustomer(customerDto);
         resp.sendRedirect(req.getContextPath() + "/customer");
     }
 

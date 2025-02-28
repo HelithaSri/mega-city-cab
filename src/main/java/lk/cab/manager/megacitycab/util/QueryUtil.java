@@ -11,4 +11,5 @@ public class QueryUtil {
     public static final String FIND_CUSTOMER_BY_USERNAME = "SELECT * FROM customers WHERE username = ?";
     public static final String FIND_LAST_CUSTOMER_ID = "SELECT id FROM customers ORDER BY id DESC LIMIT 1";
     public static final String SAVE_CUSTOMER = "INSERT INTO customers (id, name, address, nic, mobile, email, dob) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static final String UPDATE_CUSTOMER = "UPDATE customers SET name = ?, address = ?, nic = ?, mobile = ?, email = ?, dob = ?  WHERE id = ?";
 }
