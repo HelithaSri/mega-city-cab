@@ -60,7 +60,7 @@
         <div style="width: 200px; padding: 20px; background-color: #007bff; color: white; border-radius: 8px; cursor: pointer;"
              onclick="location.href='customer'">
             <h4>👥 Manage Customers</h4>
-            <p>View, Add, update & delete customers</p>
+            <p>Add, View, Update & Delete customers</p>
         </div>
 
         <!-- Booking Management -->
