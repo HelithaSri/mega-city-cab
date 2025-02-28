@@ -6,30 +6,34 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lk.cab.manager.megacitycab.model.DefaultResponse;
-import lk.cab.manager.megacitycab.service.LoginService;
+import lk.cab.manager.megacitycab.service.AuthService;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @WebServlet("/auth/*")
 public class AuthController extends HttpServlet {
+    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    private final LoginService loginService = new LoginService();
+    private final AuthService loginService = new AuthService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        LOGGER.log(Level.INFO, () -> "Received POST request for auth" + req.getServletPath());
+
         String pathInfo = req.getPathInfo();
-        System.out.println("Request come for auth");
 
         switch (pathInfo) {
             case "/login":
-                System.out.println("Request come for login");
                 login(req, resp);
                 break;
             case "/logout":
                 logout(req, resp);
                 break;
             default:
+                LOGGER.log(Level.WARNING, () -> "Invalid POST request received: {}" + pathInfo);
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Endpoint not found");
                 break;
         }

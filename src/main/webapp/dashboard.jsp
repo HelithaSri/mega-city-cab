@@ -18,15 +18,37 @@
 <html>
 <head>
     <title>Mega City Cab - Admin Dashboard</title>
+    <style>
+        .header {
+            padding: 20px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .welcome-name {
+            font-weight: 600;
+            color: #3498db;
+        }
+    </style>
 </head>
 <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; text-align: center;">
 
 <!-- Navigation Bar -->
-<div style="padding: 15px; background: white; justify-content: space-between; display: flex; box-shadow: 0 0 10px rgba(0,0,0,0.2); border-bottom: 8px;">
+<%--<div style="padding: 15px; background: white; justify-content: space-between; display: flex; box-shadow: 0 0 10px rgba(0,0,0,0.2); border-bottom: 8px;">
     <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo"
          style="width: 150px; height: auto;">
     <h2 style="color: black; margin: 0;">Welcome, <%= ((String) session.getAttribute("user")).toUpperCase()%>
         !</h2>
+</div>--%>
+
+<div class="header">
+    <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo" style="width: 150px; height: auto;">
+    <h2>Welcome, <span class="welcome-name"><%= ((String) session.getAttribute("user")).toUpperCase()%></span>!</h2>
 </div>
 
 <!-- Dashboard Container -->
@@ -36,7 +58,7 @@
 
         <!-- Booking Management -->
         <div style="width: 200px; padding: 20px; background-color: #007bff; color: white; border-radius: 8px; cursor: pointer;"
-             onclick="location.href='manageBookings.jsp'">
+             onclick="location.href='customer'">
             <h4>📖 Manage Bookings</h4>
             <p>View and update customer bookings</p>
         </div>
@@ -83,7 +105,7 @@
 
 <script>
     function logout() {
-        fetch('${pageContext.request.contextPath}/auth/logout', { // Corrected endpoint
+        fetch('${pageContext.request.contextPath}/auth/logout', {
         method: 'POST',
         credentials: 'same-origin' // Ensure session cookies are sent
     })

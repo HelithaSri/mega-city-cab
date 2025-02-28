@@ -34,10 +34,11 @@ dependencies {
     implementation group: 'com.mysql', name: 'mysql-connector-j', version: '9.1.0'
 
     implementation(group: 'com.heroku', name: 'webapp-runner', version: '10.1.34.0') {
-//        exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-websocket'
+        // exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-websocket'
         exclude group: 'org.apache.tomcat.embed'
-//        exclude group: 'org.apache.tomcat'
+        // exclude group: 'org.apache.tomcat'
     }
+
 }
 
 test {

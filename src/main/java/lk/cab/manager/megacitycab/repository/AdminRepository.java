@@ -3,21 +3,24 @@ package lk.cab.manager.megacitycab.repository;
 import lk.cab.manager.megacitycab.entity.Admin;
 import lk.cab.manager.megacitycab.util.CrudUtil;
 import lk.cab.manager.megacitycab.util.QueryUtil;
-import lk.cab.manager.megacitycab.util.ResultSetMapper;
+import lk.cab.manager.megacitycab.util.CustomMapper;
 
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AdminRepository {
+    private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     public Admin findByUsername(String username) {
         try {
-            ResultSet rs = CrudUtil.executeQuery(QueryUtil.SELECT_ALL_ADMIN_WHERE_USERNAME, username);
+            ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_ADMIN_BY_USERNAME, username);
             if (rs.next()) {
-                return ResultSetMapper.mapResultSetToEntity(rs, Admin.class);
+                return CustomMapper.mapResultSetToEntity(rs, Admin.class);
             }
-            System.out.println("No Admin found for this username:" + username);
+            LOGGER.log(Level.INFO, () -> "No Customer found for this username:" + username);
         } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching admin by username. exception:" + e.getLocalizedMessage());
             e.getStackTrace();
         }
         return null;
