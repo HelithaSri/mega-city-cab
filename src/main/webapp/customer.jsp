@@ -12,7 +12,7 @@
 
     if (adminUser == null) {
         response.sendRedirect("index.jsp");
-        return
+        return;
     }
 %>
 
