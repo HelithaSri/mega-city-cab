@@ -15,6 +15,7 @@ public class QueryUtil {
 
     // DRIVER
     public static final String FIND_ALL_DRIVERS = "SELECT * FROM drivers";
+    public static final String FIND_ALL_DRIVERS_BY_STATUS = "SELECT * FROM drivers where availability=?";
     public static final String REMOVE_DRIVER_BY_ID = "DELETE FROM drivers WHERE id = ?";
     public static final String FIND_DRIVER_BY_ID = "SELECT * FROM drivers WHERE id = ?";
     public static final String FIND_DRIVER_BY_USERNAME = "SELECT * FROM drivers WHERE name = ?";
