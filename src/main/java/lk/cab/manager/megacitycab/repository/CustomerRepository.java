@@ -59,7 +59,7 @@ public class CustomerRepository {
             LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching customer by username. exception:" + e.getLocalizedMessage());
             e.getStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public boolean save(Customer customer) throws SQLException {

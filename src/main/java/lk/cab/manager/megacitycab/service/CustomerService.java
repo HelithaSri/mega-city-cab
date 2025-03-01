@@ -20,7 +20,7 @@ public class CustomerService {
 
 
     public boolean addCustomer(CustomerDto dto) throws SQLException {
-        String lastId = IdGenerator.generateNextCustomerId(QueryUtil.FIND_LAST_CUSTOMER_ID, "c");
+        String lastId = IdGenerator.generateNextId(QueryUtil.FIND_LAST_CUSTOMER_ID, "c");
         Customer customer = new Customer(
                 lastId,
                 dto.getName(),
