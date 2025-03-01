@@ -20,6 +20,6 @@ public class QueryUtil {
     public static final String FIND_DRIVER_BY_ID = "SELECT * FROM drivers WHERE id = ?";
     public static final String FIND_DRIVER_BY_USERNAME = "SELECT * FROM drivers WHERE name = ?";
     public static final String FIND_LAST_DRIVER_ID = "SELECT id FROM drivers ORDER BY id DESC LIMIT 1";
-    public static final String SAVE_DRIVER = "INSERT INTO drivers (id, name, address, nic, drivingLicence, mobile, email, dob, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String SAVE_DRIVER = "INSERT INTO drivers (id, name, address, nic, drivingLicence, mobile, email, dob, availability, registeredDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String UPDATE_DRIVER = "UPDATE drivers SET name = ?, address = ?, nic = ?, drivingLicence = ?, mobile = ?, email = ?, dob = ?, availability = ?  WHERE id = ?";
 }

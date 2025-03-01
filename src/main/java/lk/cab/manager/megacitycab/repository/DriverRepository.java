@@ -80,7 +80,7 @@ public class DriverRepository {
     }
 
     public boolean save(Driver driver) throws SQLException {
-        boolean executed = CrudUtil.executeUpdate(QueryUtil.SAVE_DRIVER, driver.getId(), driver.getName(), driver.getAddress(), driver.getNic(), driver.getDrivingLicence(), driver.getMobile(), driver.getEmail(), driver.getDob(), driver.isAvailability());
+        boolean executed = CrudUtil.executeUpdate(QueryUtil.SAVE_DRIVER, driver.getId(), driver.getName(), driver.getAddress(), driver.getNic(), driver.getDrivingLicence(), driver.getMobile(), driver.getEmail(), driver.getDob(), driver.isAvailability(), driver.getRegisteredDate());
         if (!executed) {
             LOGGER.log(Level.WARNING, () -> "Failed to saved driver");
             return false;

@@ -113,7 +113,7 @@
                         <div class="form-group">
                             <label for="availability" class="form-label">Availability</label>
                             <input type="text" id="availability" name="availability" class="form-control" required
-                                   value="<%= isEditMode ? driverToEdit.isAvailability() : "" %>">
+                                   value="<%= isEditMode ? driverToEdit.isAvailability() : "true" %>">
                         </div>
                     </div>
                     <div>
