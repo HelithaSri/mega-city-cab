@@ -56,15 +56,15 @@
     <!-- Dashboard Grid -->
     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;">
 
-        <!-- Booking Management -->
+        <!-- Customer Management -->
         <div style="width: 200px; padding: 20px; background-color: #007bff; color: white; border-radius: 8px; cursor: pointer;"
              onclick="location.href='customer'">
             <h4>👥 Manage Customers</h4>
-            <p>Add, View, Update & Delete customers</p>
+            <p>Add, view, update customers</p>
         </div>
 
         <!-- Booking Management -->
-        <div style="width: 200px; padding: 20px; background-color: rgba(255,213,0,0.8); color: white; border-radius: 8px; cursor: pointer;"
+        <div style="width: 200px; padding: 20px; background-color: rgb(153,0,255); color: white; border-radius: 8px; cursor: pointer;"
              onclick="location.href='customer'">
             <h4>📖 Manage Bookings</h4>
             <p>View and update customer bookings</p>
@@ -72,9 +72,9 @@
 
         <!-- Driver Management -->
         <div style="width: 200px; padding: 20px; background-color: #28a745; color: white; border-radius: 8px; cursor: pointer;"
-             onclick="location.href='manageDrivers.jsp'">
+             onclick="location.href='driver'">
             <h4>🚖 Driver Management</h4>
-            <p>View and update driver details</p>
+            <p>Add, view and update driver details</p>
         </div>
 
         <!-- Car Management -->

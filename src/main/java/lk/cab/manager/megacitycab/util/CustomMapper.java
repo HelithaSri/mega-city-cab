@@ -28,13 +28,14 @@ public class CustomMapper {
                 // Get the column name that matches the field name in ResultSet
                 try {
                     Object value = rs.getObject(field.getName());
+                    if (value != null) {
+                        if (field.getType().equals(LocalDate.class) && value instanceof Date) {
+                            // Convert java.sql.Date to java.time.LocalDate
+                            value = ((Date) value).toLocalDate();
+                        }
 
-                    if (field.getType().equals(LocalDate.class) && value instanceof Date) {
-                        // Convert java.sql.Date to java.time.LocalDate
-                        value = ((Date) value).toLocalDate();
+                        field.set(entity, value); // Set the value to the entity object
                     }
-
-                    field.set(entity, value); // Set the value to the entity object
                 } catch (IllegalAccessException e) {
                     LOGGER.log(Level.SEVERE, e, () -> "mapResultSetToEntity -> Failed to map result. exception:" + e.getLocalizedMessage());
                 }
@@ -60,7 +61,12 @@ public class CustomMapper {
                 // Get the column name that matches the field name in HttpServletRequest
                 try {
                     Object value = res.getParameter(field.getName());
-                    field.set(entity, value); // Set the value to the entity object
+                    if (value != null) {
+                        if (field.getType().toString().equals("boolean")) {
+                            value = Boolean.parseBoolean((String) value);
+                        }
+                        field.set(entity, value); // Set the value to the entity object
+                    }
                 } catch (IllegalAccessException e) {
                     LOGGER.log(Level.SEVERE, e, () -> "mapRequestToEntity -> Failed to map HttpServletRequest. exception:" + e.getLocalizedMessage());
                 }

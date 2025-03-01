@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 public class IdGenerator {
-    public static String generateNextCustomerId(String query, String startWith) throws SQLException {
+    public static String generateNextId(String query, String startWith) throws SQLException {
         String lastId = getLastId(query);
         if (lastId == null) {
             return startWith.toUpperCase(Locale.ROOT) + "001";
