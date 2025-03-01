@@ -56,7 +56,24 @@ public class DriverRepository {
             return list;
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching driver by username. exception:" + e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching drivers. exception:" + e.getLocalizedMessage());
+            e.getStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Driver> findAllByStatus(boolean status) {
+        try {
+            ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_ALL_DRIVERS_BY_STATUS,status);
+            List<Driver> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(CustomMapper.mapResultSetToEntity(rs, Driver.class));
+            }
+            LOGGER.log(Level.INFO, () -> list.size() + " Driver entries found");
+            return list;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching driver by status. exception:" + e.getLocalizedMessage());
             e.getStackTrace();
         }
         return new ArrayList<>();

@@ -1,5 +1,6 @@
 <%@ page import="lk.cab.manager.megacitycab.model.CustomerDto" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Locale" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -33,10 +34,21 @@
 </div>
 
 <div class="header">
-    <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo"
-         style="width: 150px; height: auto;">
-    <h2>Welcome, <span class="welcome-name"><%= ((String) session.getAttribute("user")).toUpperCase()%></span>!</h2>
+    <div class="logo" onclick="location.href='dashboard'">
+        <span>🚕</span> Mega City Cab
+    </div>
+    <div class="user-profile">
+        <div>Welcome, <span class="welcome-name"><%= ((String) session.getAttribute("user")).toUpperCase()%></span>
+        </div>
+        <div class="user-avatar"><%= ((String) session.getAttribute("user")).toUpperCase(Locale.ROOT).charAt(0)%>
+        </div>
+        <button
+                style="background-color: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;"
+                onclick="logout()">Logout
+        </button>
+    </div>
 </div>
+
 
 <div class="main-container">
     <div class="content">
@@ -198,6 +210,20 @@
 
 <script>
 
+    function logout() {
+fetch('${pageContext.request.contextPath}/auth/logout', {
+        method: 'POST',
+        credentials: 'same-origin' // Ensure session cookies are sent
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirect to index.jsp
+        }
+    })
+    .catch(error => console.error('Logout failed:', error));
+    }
+
+
     function loadCustomerForEdit(id, name, address, nic, mobile, email, dob) {
     const form = document.querySelector('form');
 
@@ -258,7 +284,10 @@
 
     // Add a reset button to the form
     document.addEventListener('DOMContentLoaded', function() {
-        const submitBtn = document.querySelector('button[type="submit"]');
+    // Only target the customer form, not the logout form
+    const customerForm = document.querySelector('form[action^="customer/"]');
+    if (customerForm) {
+        const submitBtn = customerForm.querySelector('button[type="submit"]');
         const resetBtn = document.createElement('button');
         resetBtn.type = 'button';
         resetBtn.className = 'btn btn-secondary';
@@ -268,7 +297,8 @@
         resetBtn.onclick = resetForm;
 
         submitBtn.parentNode.appendChild(resetBtn);
-    });
+    }
+});
 
     document.addEventListener("DOMContentLoaded", function () {
     const allForms = document.querySelectorAll("form");

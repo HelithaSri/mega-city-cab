@@ -1,5 +1,6 @@
 <%@ page import="lk.cab.manager.megacitycab.model.DriverDto" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Locale" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -33,9 +34,19 @@
 </div>
 
 <div class="header">
-    <img src="<%= request.getContextPath() %>/resources/img/logo.png" alt="Mega City Cab Logo"
-         style="width: 150px; height: auto;">
-    <h2>Welcome, <span class="welcome-name"><%= ((String) session.getAttribute("user")).toUpperCase()%></span>!</h2>
+    <div class="logo" onclick="location.href='dashboard'">
+        <span>🚕</span> Mega City Cab
+    </div>
+    <div class="user-profile">
+        <div>Welcome, <span class="welcome-name"><%= ((String) session.getAttribute("user")).toUpperCase()%></span>
+        </div>
+        <div class="user-avatar"><%= ((String) session.getAttribute("user")).toUpperCase(Locale.ROOT).charAt(0)%>
+        </div>
+        <button
+                style="background-color: #e74c3c; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;"
+                onclick="logout()">Logout
+        </button>
+    </div>
 </div>
 
 <div class="main-container">
@@ -215,6 +226,19 @@
 
 <script>
 
+    function logout() {
+    fetch('${pageContext.request.contextPath}/auth/logout', {
+        method: 'POST',
+        credentials: 'same-origin' // Ensure session cookies are sent
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url; // Redirect to index.jsp
+        }
+    })
+    .catch(error => console.error('Logout failed:', error));
+    }
+
     function loadDriverForEdit(id, name, address, nic, mobile, email, dob, drivingLicence,availability) {
     const form = document.querySelector('form');
 
@@ -298,6 +322,7 @@
         });
     });
 });
+
 </script>
 
 </body>

@@ -47,7 +47,7 @@ public class AuthController extends HttpServlet {
         if (response.isStatus()) {
             HttpSession session = req.getSession();
             session.setAttribute("user", response.getData());
-            resp.sendRedirect(req.getContextPath() + "/dashboard.jsp");
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
         } else {
             resp.sendRedirect(req.getContextPath() + "/index.jsp?error=" + response.getMessage());
         }

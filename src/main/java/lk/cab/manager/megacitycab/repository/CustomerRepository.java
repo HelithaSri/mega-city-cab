@@ -56,7 +56,7 @@ public class CustomerRepository {
             return list;
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching customer by username. exception:" + e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching customers. exception:" + e.getLocalizedMessage());
             e.getStackTrace();
         }
         return new ArrayList<>();
