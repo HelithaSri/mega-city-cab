@@ -8,7 +8,7 @@ public class IdGenerator {
     public static String generateNextId(String query, String startWith) throws SQLException {
         String lastId = getLastId(query);
         if (lastId == null) {
-            return startWith.toUpperCase(Locale.ROOT) + "001";
+            return startWith.toUpperCase(Locale.ROOT) + "0001";
         }
         int numPart = Integer.parseInt(lastId.substring(1));
         return String.format(startWith.toUpperCase(Locale.ROOT) + "%04d", numPart + 1);

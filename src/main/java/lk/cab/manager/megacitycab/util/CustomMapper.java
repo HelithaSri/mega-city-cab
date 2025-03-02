@@ -6,7 +6,9 @@ import java.lang.reflect.Field;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +35,9 @@ public class CustomMapper {
                             // Convert java.sql.Date to java.time.LocalDate
                             value = ((Date) value).toLocalDate();
                         }
-
+                        if (field.getType().equals(LocalDateTime.class) && value instanceof Timestamp) {
+                            value = ((Timestamp) value).toLocalDateTime();
+                        }
                         field.set(entity, value); // Set the value to the entity object
                     }
                 } catch (IllegalAccessException e) {

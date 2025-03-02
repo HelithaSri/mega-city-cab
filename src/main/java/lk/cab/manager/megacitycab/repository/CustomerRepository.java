@@ -15,21 +15,6 @@ import java.util.logging.Logger;
 public class CustomerRepository {
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    public Customer findByUsername(String username) {
-        try {
-            ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_CUSTOMER_BY_USERNAME, username);
-            if (rs.next()) {
-                return CustomMapper.mapResultSetToEntity(rs, Customer.class);
-            }
-            LOGGER.log(Level.INFO, () -> "No Customer found for this username:" + username);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching customer by username. exception:" + e.getLocalizedMessage());
-            e.getStackTrace();
-        }
-        return null;
-    }
-
     public Customer findById(String id) {
         try {
             ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_CUSTOMER_BY_ID, id);

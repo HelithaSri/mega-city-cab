@@ -12,6 +12,7 @@ import lk.cab.manager.megacitycab.util.CustomMapper;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,8 +28,23 @@ public class CustomerController extends HttpServlet {
         LOGGER.log(Level.INFO, () -> "Received GET request for customers");
 
         List<CustomerDto> customers = customerService.getAllCustomers();
+
+        // Get the current month and year
+        LocalDateTime now = LocalDateTime.now();
+        int currentYear = now.getYear();
+        int currentMonth = now.getMonthValue();
+
+        int newOnThisMonth = 0;
+        for (CustomerDto customer : customers) {
+            LocalDateTime createdAt = customer.getCreatedAt();
+            if (createdAt.getYear() == currentYear && createdAt.getMonthValue() == currentMonth) {
+                newOnThisMonth++;
+            }
+        }
+
         req.setAttribute("customers", customers);
         req.setAttribute("total", customers.size());
+        req.setAttribute("new_total", newOnThisMonth);
 
         RequestDispatcher dispatcher = req.getRequestDispatcher("customer.jsp");
         dispatcher.forward(req, resp);

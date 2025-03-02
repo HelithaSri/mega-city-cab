@@ -15,21 +15,6 @@ import java.util.logging.Logger;
 public class DriverRepository {
     private static final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    public Driver findByUsername(String username) {
-        try {
-            ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_DRIVER_BY_USERNAME, username);
-            if (rs.next()) {
-                return CustomMapper.mapResultSetToEntity(rs, Driver.class);
-            }
-            LOGGER.log(Level.INFO, () -> "No Driver found for this username:" + username);
-        } catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
-            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching driver by username. exception:" + e.getLocalizedMessage());
-            e.getStackTrace();
-        }
-        return null;
-    }
-
     public Driver findById(String id) {
         try {
             ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_DRIVER_BY_ID, id);
@@ -79,14 +64,13 @@ public class DriverRepository {
         return new ArrayList<>();
     }
 
-    public boolean save(Driver driver) throws SQLException {
-        boolean executed = CrudUtil.executeUpdate(QueryUtil.SAVE_DRIVER, driver.getId(), driver.getName(), driver.getAddress(), driver.getNic(), driver.getDrivingLicence(), driver.getMobile(), driver.getEmail(), driver.getDob(), driver.isAvailability(), driver.getRegisteredDate());
+    public void save(Driver driver) throws SQLException {
+        boolean executed = CrudUtil.executeUpdate(QueryUtil.SAVE_DRIVER, driver.getId(), driver.getName(), driver.getAddress(), driver.getNic(), driver.getDrivingLicence(), driver.getMobile(), driver.getEmail(), driver.getDob(), driver.isAvailability());
         if (!executed) {
             LOGGER.log(Level.WARNING, () -> "Failed to saved driver");
-            return false;
+            return;
         }
         LOGGER.log(Level.INFO, () -> "Driver successfully saved!");
-        return true;
     }
 
     public boolean delete(String id) throws SQLException {
