@@ -1,5 +1,7 @@
 package lk.cab.manager.megacitycab.model;
 
+import java.time.LocalDateTime;
+
 public class CustomerDto {
     private String id;
     private String name;
@@ -8,6 +10,7 @@ public class CustomerDto {
     private String mobile;
     private String email;
     private String dob;
+    private LocalDateTime createdAt;
 
     public CustomerDto() {
     }
@@ -20,6 +23,17 @@ public class CustomerDto {
         this.mobile = mobile;
         this.email = email;
         this.dob = dob;
+    }
+
+    public CustomerDto(String id, String name, String address, String nic, String mobile, String email, String dob, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.nic = nic;
+        this.mobile = mobile;
+        this.email = email;
+        this.dob = dob;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -76,6 +90,14 @@ public class CustomerDto {
 
     public void setDob(String dob) {
         this.dob = dob;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

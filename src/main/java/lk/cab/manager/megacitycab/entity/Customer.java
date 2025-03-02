@@ -1,6 +1,7 @@
 package lk.cab.manager.megacitycab.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Customer {
     private String id;
@@ -10,6 +11,7 @@ public class Customer {
     private String mobile;
     private String email;
     private LocalDate dob;
+    private LocalDateTime createdAt;
 
     public Customer() {
     }
@@ -22,6 +24,17 @@ public class Customer {
         this.mobile = mobile;
         this.email = email;
         this.dob = dob;
+    }
+
+    public Customer(String id, String name, String address, String nic, String mobile, String email, LocalDate dob, LocalDateTime createdAt) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.nic = nic;
+        this.mobile = mobile;
+        this.email = email;
+        this.dob = dob;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -78,5 +91,13 @@ public class Customer {
 
     public void setDob(LocalDate dob) {
         this.dob = dob;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
