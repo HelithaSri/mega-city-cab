@@ -191,7 +191,7 @@
                         </td>
                         <td><%= driver.getDob() %>
                         </td>
-                        <td><%= driver.isAvailability() ? "Available" : "Unavailable" %>
+                        <td><span class="badge badge-<%= driver.isAvailability() ? "success" : "danger" %>"><%= driver.isAvailability() ? "Available" : "Unavailable" %></span>
                         </td>
                         <td class="action-links">
                             <a href="javascript:void(0)" class="edit-link"
