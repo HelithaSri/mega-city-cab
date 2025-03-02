@@ -1,6 +1,7 @@
 package lk.cab.manager.megacitycab.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Driver {
     private String id;
@@ -12,7 +13,7 @@ public class Driver {
     private String email;
     private LocalDate dob;
     private Boolean availability;
-    private LocalDate registeredDate;
+    private LocalDateTime createdAt;
 
     public Driver() {
     }
@@ -29,7 +30,7 @@ public class Driver {
         this.availability = availability;
     }
 
-    public Driver(String id, String name, String address, String nic, String drivingLicence, String mobile, String email, LocalDate dob, boolean availability, LocalDate registeredDate) {
+    public Driver(String id, String name, String address, String nic, String drivingLicence, String mobile, String email, LocalDate dob, boolean availability, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -39,7 +40,7 @@ public class Driver {
         this.email = email;
         this.dob = dob;
         this.availability = availability;
-        this.registeredDate = registeredDate;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -114,12 +115,12 @@ public class Driver {
         this.availability = availability;
     }
 
-    public LocalDate getRegisteredDate() {
-        return registeredDate;
+    public LocalDateTime getRegisteredDate() {
+        return createdAt;
     }
 
-    public void setRegisteredDate(LocalDate registeredDate) {
-        this.registeredDate = registeredDate;
+    public void setRegisteredDate(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
@@ -134,7 +135,7 @@ public class Driver {
                 ", email='" + email + '\'' +
                 ", dob=" + dob +
                 ", availability=" + availability +
-                ", registeredDate=" + registeredDate +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }

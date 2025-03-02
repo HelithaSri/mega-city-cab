@@ -73,7 +73,8 @@ public class CustomerService {
                         item.getNic(),
                         item.getMobile(),
                         item.getEmail(),
-                        item.getDob().toString()
+                        item.getDob().toString(),
+                        item.getCreatedAt()
                 )));
         LOGGER.log(Level.INFO, () -> customers.size() + " customers entries found");
 

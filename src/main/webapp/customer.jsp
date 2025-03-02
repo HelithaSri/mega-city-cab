@@ -60,7 +60,7 @@
                 <div class="stat-label">Total Customers</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">42</div>
+                <div class="stat-value">${pageContext.request.getAttribute("new_total")}</div>
                 <div class="stat-label">New This Month</div>
             </div>
         </div>

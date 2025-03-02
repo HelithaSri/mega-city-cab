@@ -30,8 +30,7 @@ public class DriverService {
                 dto.getMobile(),
                 dto.getEmail(),
                 LocalDate.parse(dto.getDob()),
-                dto.isAvailability(),
-                LocalDate.now()
+                dto.isAvailability()
         );
         driverRepository.save(driver);
     }
