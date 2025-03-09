@@ -301,6 +301,11 @@ tr:hover {
     color: white;
 }
 
+.badge-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
 .welcome-name {
     font-weight: 600;
     color: #3498db;

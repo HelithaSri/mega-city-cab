@@ -110,10 +110,17 @@
                             <input type="date" id="dob" name="dob" class="form-control" required
                                    value="<%= isEditMode ? driverToEdit.getDob() : "" %>">
                         </div>
-                        <div class="form-group">
+<%--                        <div class="form-group">
                             <label for="availability" class="form-label">Availability</label>
                             <input type="text" id="availability" name="availability" class="form-control" required
                                    value="<%= isEditMode ? driverToEdit.isAvailability() : "true" %>">
+                        </div>--%>
+                        <div class="form-group">
+                            <label for="availability" class="form-label">Availability</label>
+                            <select id="availability" name="availability" class="form-control" required>
+                                <option value="true" <%= isEditMode && driverToEdit.isAvailability() ? "selected" : "" %>>Available</option>
+                                <option value="false" <%= isEditMode && !driverToEdit.isAvailability() ? "selected" : "" %>>Unavailable</option>
+                            </select>
                         </div>
                     </div>
                     <div>
@@ -150,7 +157,7 @@
 
         <div class="card">
             <div class="card-title">
-                <span class="card-title-icon">👥</span> Driver List
+                <span class="card-title-icon">👮‍♀️</span> Driver List
             </div>
             <div class="table-responsive">
                 <table>
@@ -191,7 +198,9 @@
                         </td>
                         <td><%= driver.getDob() %>
                         </td>
-                        <td><%= driver.isAvailability() ? "Available" : "Unavailable" %>
+                        <td><span
+                                class="badge badge-<%= driver.isAvailability() ? "success" : "danger" %>"><%= driver.isAvailability() ? "Available" : "Unavailable" %></span>
+                        </td>
                         </td>
                         <td class="action-links">
                             <a href="javascript:void(0)" class="edit-link"
@@ -286,7 +295,7 @@
     const form = document.querySelector('form');
 
     form.reset(); // Clear form fields
-    form.action = 'AddDriverServlet'; // Reset action
+    form.action = 'driver/add'; // Reset action
     form.setAttribute('data-mode', 'add'); // Set mode back to "add"
 
     document.querySelector('button[type="submit"]').textContent = 'Add Driver';

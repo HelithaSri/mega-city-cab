@@ -269,7 +269,7 @@ fetch('${pageContext.request.contextPath}/auth/logout', {
     const form = document.querySelector('form');
 
     form.reset(); // Clear form fields
-    form.action = 'AddCustomerServlet'; // Reset action
+    form.action = 'customer/add'; // Reset action
     form.setAttribute('data-mode', 'add'); // Set mode back to "add"
 
     document.querySelector('button[type="submit"]').textContent = 'Add Customer';
