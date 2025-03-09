@@ -37,6 +37,35 @@ public class Vehicle {
         this.createdAt = createdAt;
     }
 
+    public Vehicle(String id, String make, String model, int year, String type, String licensePlate, BigDecimal dailyRate, BigDecimal hourlyRate, BigDecimal weeklyRate, BigDecimal mileageLimit, BigDecimal extraMileageFee) {
+        this.id = id;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.type = type;
+        this.licensePlate = licensePlate;
+        this.dailyRate = dailyRate;
+        this.hourlyRate = hourlyRate;
+        this.weeklyRate = weeklyRate;
+        this.mileageLimit = mileageLimit;
+        this.extraMileageFee = extraMileageFee;
+    }
+
+    public Vehicle(String id, String make, String model, int year, String type, String licensePlate, BigDecimal dailyRate, BigDecimal hourlyRate, BigDecimal weeklyRate, BigDecimal mileageLimit, BigDecimal extraMileageFee, String status) {
+        this.id = id;
+        this.make = make;
+        this.model = model;
+        this.year = year;
+        this.type = type;
+        this.licensePlate = licensePlate;
+        this.dailyRate = dailyRate;
+        this.hourlyRate = hourlyRate;
+        this.weeklyRate = weeklyRate;
+        this.mileageLimit = mileageLimit;
+        this.extraMileageFee = extraMileageFee;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }

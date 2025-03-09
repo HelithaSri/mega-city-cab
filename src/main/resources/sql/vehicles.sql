@@ -10,7 +10,7 @@ CREATE TABLE vehicles
     hourlyRate      DECIMAL(10, 2),
     weeklyRate      DECIMAL(10, 2),
     mileageLimit    DECIMAL(10, 2) DEFAULT 500,
-    extraMileageFee DECIMAL(10, 2) DEFAULT 0.10,
+    extraMileageFee DECIMAL(10, 2) DEFAULT 100,
     status          VARCHAR(100)   DEFAULT 'Available',
     createdAt       TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
 );

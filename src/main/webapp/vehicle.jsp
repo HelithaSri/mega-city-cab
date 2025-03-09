@@ -140,8 +140,8 @@
                                    value="<%= isEditMode ? vehicleToEdit.getMileageLimit() : "" %>">
                         </div>
                         <div class="form-group">
-                            <label for="extraMileageLimit" class="form-label">Extra Mileage Limit</label>
-                            <input type="text" id="extraMileageLimit" name="extraMileageLimit" class="form-control"
+                            <label for="extraMileageFee" class="form-label">Extra Mileage Limit</label>
+                            <input type="text" id="extraMileageFee" name="extraMileageFee" class="form-control"
                                    value="<%= isEditMode ? vehicleToEdit.getExtraMileageFee() : "" %>">
                         </div>
                         <div class="form-group">
@@ -225,7 +225,7 @@
                                                    '<%= vehicle.getMileageLimit() %>',
                                                    '<%= vehicle.getExtraMileageFee() %>',
                                                    '<%= vehicle.getStatus() %>',)">Edit</a>
-                            <form action="driver/delete" method="post" onsubmit="return confirmDelete()"
+                            <form action="vehicle/delete" method="post" onsubmit="return confirmDelete()"
                                   style="display:inline;">
                                 <input type="hidden" name="id" value="<%= vehicle.getId() %>">
                                 <button type="submit" class="delete-btn">Delete</button>
@@ -260,7 +260,7 @@ fetch('${pageContext.request.contextPath}/auth/logout', {
     }
 
 
-    function loadVehicleForEdit(id, make, model, year, type, licensePlate, dailyRate, hourlyRate, weeklyRate, mileageLimit, extraMileageLimit, status) {
+    function loadVehicleForEdit(id, make, model, year, type, licensePlate, dailyRate, hourlyRate, weeklyRate, mileageLimit, extraMileageFee, status) {
     const form = document.querySelector('form');
 
     // If already in edit mode, just update fields
@@ -297,7 +297,7 @@ fetch('${pageContext.request.contextPath}/auth/logout', {
     document.getElementById('hourlyRate').value = hourlyRate;
     document.getElementById('weeklyRate').value = weeklyRate;
     document.getElementById('mileageLimit').value = mileageLimit;
-    document.getElementById('extraMileageLimit').value = extraMileageLimit;
+    document.getElementById('extraMileageFee').value = extraMileageFee;
     document.getElementById('status').value = status;
 
     // Scroll to the form smoothly

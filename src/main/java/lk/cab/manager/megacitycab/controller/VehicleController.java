@@ -7,9 +7,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lk.cab.manager.megacitycab.model.VehicleDataDto;
+import lk.cab.manager.megacitycab.model.VehicleDto;
 import lk.cab.manager.megacitycab.service.VehicleService;
+import lk.cab.manager.megacitycab.util.CustomMapper;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +36,7 @@ public class VehicleController extends HttpServlet {
         dispatcher.forward(req, resp);
     }
 
-/*
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pathInfo = req.getPathInfo();
@@ -83,5 +86,5 @@ public class VehicleController extends HttpServlet {
         LOGGER.log(Level.INFO, () -> "vehicle deleted by ID: " + drivingId);
         vehicleService.deleteVehicle(drivingId);
         resp.sendRedirect(req.getContextPath() + "/vehicle");
-    }*/
+    }
 }

@@ -3,6 +3,7 @@ package lk.cab.manager.megacitycab.util;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -68,6 +69,12 @@ public class CustomMapper {
                     if (value != null) {
                         if (field.getType().toString().equals("boolean")) {
                             value = Boolean.parseBoolean((String) value);
+                        }
+                        if (field.getType().toString().equals("int")) {
+                            value = Integer.parseInt((String) value);
+                        }
+                        if (field.getType().equals(BigDecimal.class)) {
+                            value = new BigDecimal(String.valueOf(value));
                         }
                         field.set(entity, value); // Set the value to the entity object
                     }
