@@ -110,11 +110,6 @@
                             <input type="date" id="dob" name="dob" class="form-control" required
                                    value="<%= isEditMode ? driverToEdit.getDob() : "" %>">
                         </div>
-<%--                        <div class="form-group">--%>
-<%--                            <label for="availability" class="form-label">Availability</label>--%>
-<%--                            <input type="text" id="availability" name="availability" class="form-control" required--%>
-<%--                                   value="<%= isEditMode ? driverToEdit.isAvailability() : "true" %>">--%>
-<%--                        </div>&ndash;%&gt;--%>
                         <div class="form-group">
                             <label for="availability" class="form-label">Availability</label>
                             <select id="availability" name="availability" class="form-control" required>
