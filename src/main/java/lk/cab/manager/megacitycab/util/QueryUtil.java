@@ -22,4 +22,14 @@ public class QueryUtil {
     public static final String FIND_LAST_DRIVER_ID = "SELECT id FROM drivers ORDER BY id DESC LIMIT 1";
     public static final String SAVE_DRIVER = "INSERT INTO drivers (id, name, address, nic, drivingLicence, mobile, email, dob, availability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     public static final String UPDATE_DRIVER = "UPDATE drivers SET name = ?, address = ?, nic = ?, drivingLicence = ?, mobile = ?, email = ?, dob = ?, availability = ?  WHERE id = ?";
+
+    // VEHICLE
+    public static final String FIND_ALL_VEHICLES = "SELECT * FROM vehicles";
+    public static final String FIND_LAST_VEHICLE_ID = "SELECT id FROM vehicles ORDER BY id DESC LIMIT 1";
+    public static final String SAVE_VEHICLE = "INSERT INTO vehicles (id, make, model, year, type, licensePlate, dailyRate, hourlyRate, weeklyRate, mileageLimit, extraMileageFee, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static final String UPDATE_VEHICLE = "UPDATE vehicles SET make = ?, model = ?, year = ?, type = ?, licensePlate = ?, dailyRate = ?, hourlyRate = ?, weeklyRate = ?, mileageLimit = ?, extraMileageFee = ?, status = ? WHERE id = ?";
+    public static final String REMOVE_VEHICLE_BY_ID = "DELETE FROM vehicles WHERE id = ?";
+    public static final String FIND_VEHICLE_BY_ID = "SELECT * FROM vehicles WHERE id = ?";
+
+
 }

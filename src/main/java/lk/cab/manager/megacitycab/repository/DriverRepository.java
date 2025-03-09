@@ -41,7 +41,7 @@ public class DriverRepository {
             return list;
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching drivers. exception:" + e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findAll -> Error occurred while fetching drivers. exception:" + e.getLocalizedMessage());
             e.getStackTrace();
         }
         return new ArrayList<>();
@@ -58,7 +58,7 @@ public class DriverRepository {
             return list;
         } catch (Exception e) {
             System.out.println(e.getLocalizedMessage());
-            LOGGER.log(Level.SEVERE, e, () -> "findByUsername -> Error occurred while fetching driver by status. exception:" + e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findAllByStatus -> Error occurred while fetching driver by status. exception:" + e.getLocalizedMessage());
             e.getStackTrace();
         }
         return new ArrayList<>();
