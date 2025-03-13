@@ -30,6 +30,7 @@ public class QueryUtil {
     public static final String UPDATE_VEHICLE = "UPDATE vehicles SET make = ?, model = ?, year = ?, type = ?, licensePlate = ?, dailyRate = ?, hourlyRate = ?, weeklyRate = ?, mileageLimit = ?, extraMileageFee = ?, status = ? WHERE id = ?";
     public static final String REMOVE_VEHICLE_BY_ID = "DELETE FROM vehicles WHERE id = ?";
     public static final String FIND_VEHICLE_BY_ID = "SELECT * FROM vehicles WHERE id = ?";
+    public static final String FIND_ALL_VEHICLES_BY_STATUS = "SELECT * FROM vehicles where status=?";
 
 
 }
