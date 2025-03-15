@@ -85,7 +85,7 @@
         <h2>Login</h2>
     </div>
 
-    <form action="auth/login" method="post">
+    <form action="auth/login" method="post" autocomplete="off">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" required>

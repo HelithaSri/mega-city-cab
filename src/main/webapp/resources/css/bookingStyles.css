@@ -76,6 +76,7 @@ body {
     border-bottom: 2px solid #3498db;
     padding-bottom: 10px;
     text-align: left;
+    font-weight: bold;
 }
 
 .card {
@@ -258,6 +259,15 @@ tr:hover {
     background-color: #c0392b;
 }
 
+.success-link {
+    color: white;
+    background-color: #89e73c;
+}
+
+.success-link:hover {
+    background-color: #73c02b;
+}
+
 .badge {
     display: inline-block;
     padding: 3px 8px;
@@ -305,6 +315,25 @@ tr:hover {
     }
 }
 
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+.delete-btn:active {
+    background-color: #a80000;
+}
+
 .success-btn{
     background-color: #2ecc71;
     color: white;
@@ -323,44 +352,6 @@ tr:hover {
 
 .success-btn:active {
     background-color: #08ae4e;
-}
-
-.pending-btn{
-    background-color: #eadd4a;
-    color: black;
-    border: none;
-    padding: 4px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-}
-
-.pending-btn:hover {
-    background-color: #e8d92c;
-}
-
-.pending-btn:active {
-    background-color: #b6aa19;
-}
-
-.delete-btn {
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    padding: 4px 12px;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-}
-
-.delete-btn:hover {
-    background-color: #cc0000;
-}
-
-.delete-btn:active {
-    background-color: #a80000;
 }
 
 /* Additional styles for specific components */

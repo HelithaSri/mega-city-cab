@@ -1,5 +1,7 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="lk.cab.manager.megacitycab.model.DashboardResponse" %>
+<%@ page import="lk.cab.manager.megacitycab.entity.Transaction" %>
+<%@ page import="java.util.List" %>
 <%@ page session="true" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -21,9 +23,14 @@
 <head>
     <title>Mega City Cab - Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/css/dashboardStyles.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/css/loader.css">
 </head>
 
 <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; text-align: center;">
+
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
 
 <div class="header">
     <div class="logo" onclick="location.href='dashboard'">
@@ -109,11 +116,40 @@
                         </div>
             --%>
 
+            <!-- Status Messages -->
+            <%
+                String bookingMessage = (String) session.getAttribute("bookingMessage");
+                String bookingStatus = (String) session.getAttribute("bookingStatus");
+
+                if (bookingMessage != null) {
+                    String alertClass = "alert-info";
+                    if ("success".equalsIgnoreCase(bookingStatus)) {
+                        alertClass = "alert-success";
+                    } else if ("error".equalsIgnoreCase(bookingStatus)) {
+                        alertClass = "alert-danger";
+                    }
+            %>
+            <div class="alert <%= alertClass %>">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <%= bookingMessage %>
+            </div>
+            <%
+                    // Remove the attributes after displaying
+                    session.removeAttribute("bookingMessage");
+                    session.removeAttribute("bookingStatus");
+                }
+            %>
+            <%--            --%>
+
             <div class="card">
                 <div class="card-title">
                     <span class="card-title-icon">📝</span> Recent Bookings
                 </div>
                 <div class="table-responsive">
+                    <%
+                        System.out.println(pageContext.getServletContext().getContextPath());
+
+                    %>
                     <table>
                         <thead>
                         <tr>
@@ -121,49 +157,66 @@
                             <th>Customer</th>
                             <th>Vehicle</th>
                             <th>Driver</th>
-                            <th>Date</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Total</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
+                        <%
+                            List<Transaction> bookings = stats.getBookings();
+                            for (Transaction booking : bookings) {
+                        %>
                         <tr>
-                            <td>B-1024</td>
-                            <td>John Smith</td>
-                            <td>Toyota Camry (ABC-123)</td>
-                            <td>Michael Brown</td>
-                            <td>Mar 01, 2025</td>
-                            <td><span class="badge badge-success">Confirmed</span></td>
+                            <td><%= booking.getId() %>
+                            </td>
+                            <td><%= booking.getCustomerId() %> | <%= booking.getCustomerName() %>
+                            </td>
+                            <td><%= booking.getVehicleId() %> | <%= booking.getVehicleName() %>
+                            </td>
+                            <td><%= booking.getDriverId() %> | <%= booking.getDriverName() %>
+                            </td>
+                            <td><%= booking.getStartDate().toLocalDate() %>
+                            </td>
+                            <td><%= booking.getEndDate().toLocalDate() %>
+                            </td>
+                            <td><%= booking.getTotal() %>
+                            </td>
+                            <td>
+                            <span class="badge badge-<%=booking.getStatus().equalsIgnoreCase("Ongoing")?"pending":(booking.getStatus().equalsIgnoreCase("Complete")?"success":"danger")%>">
+                                <%= booking.getStatus() %>
+                            </span>
+                            </td>
                             <td class="action-links">
-                                <a href="#" class="edit-link">View</a>
+                                <% if ("Ongoing".equalsIgnoreCase(booking.getStatus())) { %>
+                                <form action="<%=pageContext.getServletContext().getContextPath()%>/booking/cancel"
+                                      method="POST" style="display:inline;">
+                                    <input type="hidden" name="bookingId" value="<%= booking.getId() %>">
+                                    <button type="submit" class="delete-btn">Cancel</button>
+                                </form>
+                                <form action="<%=pageContext.getServletContext().getContextPath()%>/booking/complete"
+                                      method="POST" style="display:inline;">
+                                    <input type="hidden" name="bookingId" value="<%= booking.getId() %>">
+                                    <button type="submit" class="success-btn">Complete</button>
+                                </form>
+                                <% } else if ("Cancelled".equalsIgnoreCase(booking.getStatus()) || "Completed".equalsIgnoreCase(booking.getStatus())) { %>
+                                <button class="action-button" disabled>Completed</button>
+                                <% } %>
+                                <!-- View Booking Button -->
+                                <%--<form action="/admin/viewBookingDetails" method="GET" style="display:inline;">
+                                    <input type="hidden" name="bookingId" value="<%= booking.getId() %>">
+                                    <button type="submit" class="pending-btn">View</button>
+                                </form>--%>
                             </td>
                         </tr>
-                        <tr>
-                            <td>B-1023</td>
-                            <td>Emily Johnson</td>
-                            <td>Honda Accord (XYZ-789)</td>
-                            <td>David Wilson</td>
-                            <td>Mar 01, 2025</td>
-                            <td><span class="badge badge-pending">Pending</span></td>
-                            <td class="action-links">
-                                <a href="#" class="edit-link">View</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>B-1022</td>
-                            <td>Robert Davis</td>
-                            <td>Ford Explorer (DEF-456)</td>
-                            <td>Sarah Martinez</td>
-                            <td>Feb 28, 2025</td>
-                            <td><span class="badge badge-success">Completed</span></td>
-                            <td class="action-links">
-                                <a href="#" class="edit-link">View</a>
-                            </td>
-                        </tr>
+                        <% } %>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -182,6 +235,32 @@
     })
     .catch(error => console.error('Logout failed:', error));
 }
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const allForms = document.querySelectorAll("form");
+
+    allForms.forEach(function (form) {
+        form.addEventListener("submit", function () {
+            document.getElementById("loading-overlay").style.display = "flex";
+        });
+    });
+});
+
+    // Auto-dismiss alerts after 5 seconds
+document.addEventListener("DOMContentLoaded", function() {
+    setTimeout(function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            if (alert) {
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.5s';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500);
+            }
+        });
+    }, 5000);
+});
 </script>
 
 </html>
