@@ -103,4 +103,21 @@ public class VehicleRepository {
         }
         return null;
     }
+
+    public List<Vehicle> findAllByStatus(String status) {
+        try {
+            ResultSet rs = CrudUtil.executeQuery(QueryUtil.FIND_ALL_VEHICLES_BY_STATUS, status);
+            List<Vehicle> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(CustomMapper.mapResultSetToEntity(rs, Vehicle.class));
+            }
+            LOGGER.log(Level.INFO, () -> list.size() + " Vehicle entries found by status: " + status);
+            return list;
+        } catch (Exception e) {
+            System.out.println(e.getLocalizedMessage());
+            LOGGER.log(Level.SEVERE, e, () -> "findAllByStatus -> Error occurred while fetching vehicles. exception:" + e.getLocalizedMessage());
+            e.getStackTrace();
+        }
+        return new ArrayList<>();
+    }
 }
