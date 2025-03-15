@@ -164,7 +164,7 @@
                                     <select class="form-select" id="vehicleId" name="vehicleId" required>
                                         <option value="">-- Select Vehicle --</option>
                                         <% for (VehicleDto vehicle : (List<VehicleDto>) request.getAttribute("availableVehicles")) { %>
-                                        <% if ("Available".equals(vehicle.getStatus())) { %>
+                                        <% if ("Available".equalsIgnoreCase(vehicle.getStatus())) { %>
                                         <option value="<%= vehicle.getId() %>"
                                                 data-make="<%= vehicle.getMake() %>"
                                                 data-model="<%= vehicle.getModel() %>"

@@ -6,6 +6,20 @@
 <%@ page import="lk.cab.manager.megacitycab.model.DriverDto" %>
 <%@ page import="lk.cab.manager.megacitycab.model.CustomerDto" %>
 <%@ page import="java.util.Locale" %>
+
+<%
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+
+    String adminUser = (String) session.getAttribute("user");
+
+    if (adminUser == null) {
+        response.sendRedirect("index.jsp");
+        return;
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +28,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
     <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/css/bookingStyles.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/resources/css/loader.css">
     <style>
         .rate-info {
             background-color: #f8f9fa;
@@ -37,6 +52,10 @@
     </style>
 </head>
 <body>
+<div id="loading-overlay">
+    <div class="spinner"></div>
+</div>
+
 <div class="header">
     <div class="logo" onclick="location.href='dashboard'">
         <span>🚕</span> Mega City Cab
@@ -53,9 +72,32 @@
     </div>
 </div>
 <div class="container mt-4">
-    <h1 class="page-title">Customer Management</h1>
+    <!-- Status Messages -->
+    <%
+        String bookingMessage = (String) session.getAttribute("bookingMessage");
+        String bookingStatus = (String) session.getAttribute("bookingStatus");
 
-    <form id="bookingForm" action="saveBooking" method="post">
+        if (bookingMessage != null) {
+            String alertClass = "alert-info";
+            if ("success".equalsIgnoreCase(bookingStatus)) {
+                alertClass = "alert-success";
+            } else if ("error".equalsIgnoreCase(bookingStatus)) {
+                alertClass = "alert-danger";
+            }
+    %>
+    <div class="alert <%= alertClass %> alert-dismissible fade show" role="alert">
+        <%= bookingMessage %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <%
+            // Remove the attributes after displaying
+            session.removeAttribute("bookingMessage");
+            session.removeAttribute("bookingStatus");
+        }
+    %>
+    <h1 class="page-title">Booking Management</h1>
+
+    <form id="bookingForm" action="booking/do" method="post">
         <div class="row">
             <!-- Customer Selection -->
             <div class="col-md-6 mb-4">
@@ -99,14 +141,7 @@
                         <h5>Driver Information</h5>
                     </div>
                     <div class="card-body">
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="requireDriver" name="requireDriver">
-                            <label class="form-check-label" for="requireDriver">
-                                Require a driver
-                            </label>
-                        </div>
-
-                        <div id="driverSelection" class="d-none">
+                        <div id="driverSelection" class="">
                             <div class="mb-3">
                                 <label for="driverId" class="form-label">Select Driver</label>
                                 <select class="form-select" id="driverId" name="driverId">
@@ -178,7 +213,7 @@
                                         <%
                                             if (availableVehicles != null) {
                                                 for (VehicleDto vehicle : availableVehicles) {
-                                                    if ("Available".equals(vehicle.getStatus())) {
+                                                    if ("Available".equalsIgnoreCase(vehicle.getStatus())) {
                                         %>
                                         <option value="<%= vehicle.getId() %>"
                                                 data-make="<%= vehicle.getMake() %>"
@@ -277,9 +312,9 @@
                                 <div class="col-md-6">
                                     <p><strong>Base Rate:</strong> LKR <span id="baseRateAmount">0.00</span></p>
                                     <p><strong>Duration:</strong> <span id="durationText">0 days</span></p>
-                                    <p><strong>Extra Mileage Charge:</strong> LKR <span id="extraMileageCharge">0.00</span>
+                                    <p><strong>Extra Mileage Charge:</strong> LKR <span
+                                            id="extraMileageCharge">0.00</span>
                                     </p>
-                                    <p><strong>Driver Fee:</strong> LKR <span id="driverFee">0.00</span></p>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
@@ -353,204 +388,239 @@
         });
 
         // Driver requirement toggle
-        $("#requireDriver").change(function() {
-            if ($(this).is(":checked")) {
-                $("#driverSelection").removeClass("d-none");
-                $("#driverId").prop("required", true);
-            } else {
-                $("#driverSelection").addClass("d-none");
-                $("#driverDetails").addClass("d-none");
-                $("#driverId").prop("required", false);
-            }
-            calculateTotal();
-        });
+    <%--$("#requireDriver").change(function() {
+        if ($(this).is(":checked")) {
+            $("#driverSelection").removeClass("d-none");
+            $("#driverId").prop("required", true);
+        } else {
+            $("#driverSelection").addClass("d-none");
+            $("#driverDetails").addClass("d-none");
+            $("#driverId").prop("required", false);
+        }
+        calculateTotal();
+    });--%>
 
-        // Driver selection
-        $("#driverId").change(function() {
-            const selectedId = $(this).val();
-            if (selectedId) {
-                // In a real application, you would fetch driver details via AJAX
-                $.ajax({
-                    url: "getDriverDetails",
-                    type: "GET",
-                    data: { driverId: selectedId },
-                    success: function(driver) {
-                        $("#driverName").text(driver.name);
-                        $("#driverLicense").text(driver.drivingLicence);
-                        $("#driverMobile").text(driver.mobile);
-                        $("#driverDetails").removeClass("d-none");
-                    }
-                });
-            } else {
-                $("#driverDetails").addClass("d-none");
-            }
-            calculateTotal();
-        });
-
-        // Vehicle type filter
-        $("#vehicleType").change(function() {
-            const selectedType = $(this).val();
-            $("#vehicleId option").show();
-            if (selectedType) {
-                $("#vehicleId option").each(function() {
-                    if ($(this).data("type") !== selectedType && $(this).val() !== "") {
-                        $(this).hide();
-                    }
-                });
-            }
-            // Reset vehicle selection
-            $("#vehicleId").val("");
-            $("#vehicleDetails").addClass("d-none");
-            calculateTotal();
-        });
-
-        // Vehicle selection
-        $("#vehicleId").change(function() {
-            const selectedOption = $(this).find("option:selected");
-            if (selectedOption.val()) {
-                const vehicle = {
-                    make: selectedOption.data("make"),
-                    model: selectedOption.data("model"),
-                    year: selectedOption.data("year"),
-                    type: selectedOption.data("type"),
-                    plate: selectedOption.data("plate"),
-                    hourlyRate: selectedOption.data("hourly"),
-                    dailyRate: selectedOption.data("daily"),
-                    weeklyRate: selectedOption.data("weekly"),
-                    mileageLimit: selectedOption.data("mileagelimit"),
-                    extraMileageFee: selectedOption.data("extramileagefee")
-                };
-
-                // Populate vehicle details
-                $("#vehicleMakeModel").text(vehicle.make + " " + vehicle.model);
-                $("#vehicleYear").text(vehicle.year);
-                $("#vehicleTypeInfo").text(vehicle.type);
-                $("#vehiclePlate").text(vehicle.plate);
-
-                // Populate rate information
-                $("#hourlyRate").text(vehicle.hourlyRate);
-                $("#dailyRate").text(vehicle.dailyRate);
-                $("#weeklyRate").text(vehicle.weeklyRate);
-                $("#mileageLimit").text(vehicle.mileageLimit);
-                $("#extraMileageFee").text(vehicle.extraMileageFee);
-
-                $("#vehicleDetails").removeClass("d-none");
-            } else {
-                $("#vehicleDetails").addClass("d-none");
-            }
-            calculateTotal();
-        });
-
-        // Rental dates change
-        $("#startDateTime, #endDateTime").change(calculateTotal);
-
-        // Other inputs change
-        $("#rentalType, #estimatedMileage, #discount, #additionalFees").change(calculateTotal);
-        $("#estimatedMileage, #discount, #additionalFees").on("input", calculateTotal);
-
-        // Calculate total function
-        function calculateTotal() {
-            const selectedVehicle = $("#vehicleId option:selected");
-            if (!selectedVehicle.val()) return;
-
-            // Get vehicle rates
-            const hourlyRate = parseFloat(selectedVehicle.data("hourly")) || 0;
-            const dailyRate = parseFloat(selectedVehicle.data("daily")) || 0;
-            const weeklyRate = parseFloat(selectedVehicle.data("weekly")) || 0;
-            const mileageLimit = parseFloat(selectedVehicle.data("mileagelimit")) || 0;
-            const extraMileageFee = parseFloat(selectedVehicle.data("extramileagefee")) || 0;
-
-            // Get dates
-            const startDate = new Date($("#startDateTime").val());
-            const endDate = new Date($("#endDateTime").val());
-
-            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-                return;
-            }
-
-            // Calculate duration
-            const diffTime = Math.abs(endDate - startDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
-            const diffWeeks = Math.floor(diffDays / 7);
-            const remainingDays = diffDays % 7;
-
-            // Get rental type
-            const rentalType = $("#rentalType").val();
-
-            let baseRate = 0;
-            let durationText = "";
-
-            // Calculate base rate based on rental type
-            if (rentalType === "hourly") {
-                baseRate = hourlyRate * diffHours;
-                durationText = diffHours + " hour" + (diffHours !== 1 ? "s" : "");
-            } else if (rentalType === "daily") {
-                baseRate = dailyRate * diffDays;
-                durationText = diffDays + " day" + (diffDays !== 1 ? "s" : "");
-            } else if (rentalType === "weekly") {
-                baseRate = (weeklyRate * diffWeeks) + (dailyRate * remainingDays);
-                durationText = diffWeeks + " week" + (diffWeeks !== 1 ? "s" : "");
-                if (remainingDays > 0) {
-                    durationText += " and " + remainingDays + " day" + (remainingDays !== 1 ? "s" : "");
+    // Driver selection
+    $("#driverId").change(function() {
+        const selectedId = $(this).val();
+        if (selectedId) {
+            // In a real application, you would fetch driver details via AJAX
+            $.ajax({
+                url: "getDriverDetails",
+                type: "GET",
+                data: { driverId: selectedId },
+                success: function(driver) {
+                    $("#driverName").text(driver.name);
+                    $("#driverLicense").text(driver.drivingLicence);
+                    $("#driverMobile").text(driver.mobile);
+                    $("#driverDetails").removeClass("d-none");
                 }
-            }
+            });
+        } else {
+            $("#driverDetails").addClass("d-none");
+        }
+        calculateTotal();
+    });
 
-            // Calculate extra mileage charge
-            const estimatedMileage = parseFloat($("#estimatedMileage").val()) || 0;
-            let extraMileageCharge = 0;
-            if (estimatedMileage > mileageLimit) {
-                extraMileageCharge = (estimatedMileage - mileageLimit) * extraMileageFee;
-            }
+    // Vehicle type filter
+    $("#vehicleType").change(function() {
+        const selectedType = $(this).val();
+        $("#vehicleId option").show();
+        if (selectedType) {
+            $("#vehicleId option").each(function() {
+                if ($(this).data("type") !== selectedType && $(this).val() !== "") {
+                    $(this).hide();
+                }
+            });
+        }
+        // Reset vehicle selection
+        $("#vehicleId").val("");
+        $("#vehicleDetails").addClass("d-none");
+        calculateTotal();
+    });
 
-            // Calculate driver fee (simplified - in real app would be more complex)
-            let driverFee = 0;
-            if ($("#requireDriver").is(":checked") && $("#driverId").val()) {
-                // Example: $20 per day for driver
-                driverFee = 20 * diffDays;
-            }
+    // Vehicle selection
+    $("#vehicleId").change(function() {
+        const selectedOption = $(this).find("option:selected");
+        if (selectedOption.val()) {
+            const vehicle = {
+                make: selectedOption.data("make"),
+                model: selectedOption.data("model"),
+                year: selectedOption.data("year"),
+                type: selectedOption.data("type"),
+                plate: selectedOption.data("plate"),
+                hourlyRate: selectedOption.data("hourly"),
+                dailyRate: selectedOption.data("daily"),
+                weeklyRate: selectedOption.data("weekly"),
+                mileageLimit: selectedOption.data("mileagelimit"),
+                extraMileageFee: selectedOption.data("extramileagefee")
+            };
 
-            // Calculate discount
-            const discount = parseFloat($("#discount").val()) || 0;
-            const discountAmount = (baseRate * discount) / 100;
+            // Populate vehicle details
+            $("#vehicleMakeModel").text(vehicle.make + " " + vehicle.model);
+            $("#vehicleYear").text(vehicle.year);
+            $("#vehicleTypeInfo").text(vehicle.type);
+            $("#vehiclePlate").text(vehicle.plate);
 
-            // Additional fees
-            const additionalFees = parseFloat($("#additionalFees").val()) || 0;
+            // Populate rate information
+            $("#hourlyRate").text(vehicle.hourlyRate);
+            $("#dailyRate").text(vehicle.dailyRate);
+            $("#weeklyRate").text(vehicle.weeklyRate);
+            $("#mileageLimit").text(vehicle.mileageLimit);
+            $("#extraMileageFee").text(vehicle.extraMileageFee);
 
-            // Calculate total
-            const totalPrice = baseRate + extraMileageCharge + driverFee + additionalFees - discountAmount;
+            $("#vehicleDetails").removeClass("d-none");
+        } else {
+            $("#vehicleDetails").addClass("d-none");
+        }
+        calculateTotal();
+    });
 
-            // Update UI
-            $("#baseRateAmount").text(baseRate.toFixed(2));
-            $("#durationText").text(durationText);
-            $("#extraMileageCharge").text(extraMileageCharge.toFixed(2));
-            $("#driverFee").text(driverFee.toFixed(2));
-            $("#totalPrice").text(totalPrice.toFixed(2));
+    // Rental dates change
+    $("#startDateTime, #endDateTime").change(calculateTotal);
 
-            // Set hidden field for form submission
-            $("#calculatedPrice").val(totalPrice.toFixed(2));
+    // Other inputs change
+    $("#rentalType, #estimatedMileage, #discount, #additionalFees").change(calculateTotal);
+    $("#estimatedMileage, #discount, #additionalFees").on("input", calculateTotal);
+
+    // Calculate total function
+    function calculateTotal() {
+        const selectedVehicle = $("#vehicleId option:selected");
+        if (!selectedVehicle.val()) return;
+
+        // Get vehicle rates
+        const hourlyRate = parseFloat(selectedVehicle.data("hourly")) || 0;
+        const dailyRate = parseFloat(selectedVehicle.data("daily")) || 0;
+        const weeklyRate = parseFloat(selectedVehicle.data("weekly")) || 0;
+        const mileageLimit = parseFloat(selectedVehicle.data("mileagelimit")) || 0;
+        const extraMileageFee = parseFloat(selectedVehicle.data("extramileagefee")) || 0;
+
+        // Get dates
+        const startDate = new Date($("#startDateTime").val());
+        const endDate = new Date($("#endDateTime").val());
+
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            return;
         }
 
-        // Form validation
-        $("#bookingForm").submit(function(event) {
-            const startDate = new Date($("#startDateTime").val());
-            const endDate = new Date($("#endDateTime").val());
+        // Calculate duration
+        const diffTime = Math.abs(endDate - startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+        const diffWeeks = Math.floor(diffDays / 7);
+        const remainingDays = diffDays % 7;
 
-            if (endDate <= startDate) {
-                alert("End date must be after start date");
-                event.preventDefault();
-                return false;
+        // Get rental type
+        const rentalType = $("#rentalType").val();
+
+        let baseRate = 0;
+        let durationText = "";
+
+        // Calculate base rate based on rental type
+        if (rentalType === "hourly") {
+            baseRate = hourlyRate * diffHours;
+            durationText = diffHours + " hour" + (diffHours !== 1 ? "s" : "");
+        } else if (rentalType === "daily") {
+            baseRate = dailyRate * diffDays;
+            durationText = diffDays + " day" + (diffDays !== 1 ? "s" : "");
+        } else if (rentalType === "weekly") {
+            baseRate = (weeklyRate * diffWeeks) + (dailyRate * remainingDays);
+            durationText = diffWeeks + " week" + (diffWeeks !== 1 ? "s" : "");
+            if (remainingDays > 0) {
+                durationText += " and " + remainingDays + " day" + (remainingDays !== 1 ? "s" : "");
             }
+        }
 
-            if ($("#requireDriver").is(":checked") && !$("#driverId").val()) {
-                alert("Please select a driver");
-                event.preventDefault();
-                return false;
-            }
+        // Calculate extra mileage charge
+        const estimatedMileage = parseFloat($("#estimatedMileage").val()) || 0;
+        let extraMileageCharge = 0;
+        if (estimatedMileage > mileageLimit) {
+            extraMileageCharge = (estimatedMileage - mileageLimit) * extraMileageFee;
+        }
 
-            return true;
+        // Calculate discount
+        const discount = parseFloat($("#discount").val()) || 0;
+        const discountAmount = (baseRate * discount) / 100;
+
+        // Additional fees
+        const additionalFees = parseFloat($("#additionalFees").val()) || 0;
+
+        // Calculate total
+        const totalPrice = baseRate + extraMileageCharge + additionalFees - discountAmount;
+
+        // Update UI
+        $("#baseRateAmount").text(baseRate.toFixed(2));
+        $("#durationText").text(durationText);
+        $("#extraMileageCharge").text(extraMileageCharge.toFixed(2));
+        $("#totalPrice").text(totalPrice.toFixed(2));
+
+        // Set hidden field for form submission
+        $("#calculatedPrice").val(totalPrice.toFixed(2));
+    }
+
+    // Form validation
+    $("#bookingForm").submit(function(event) {
+        const startDate = new Date($("#startDateTime").val());
+        const endDate = new Date($("#endDateTime").val());
+
+        if (endDate <= startDate) {
+            alert("End date must be after start date");
+            event.preventDefault();
+            return false;
+        }
+
+        if ($("#requireDriver").is(":checked") && !$("#driverId").val()) {
+            alert("Please select a driver");
+            event.preventDefault();
+            return false;
+        }
+
+        return true;
+    });
+});
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const allForms = document.querySelectorAll("form");
+
+    allForms.forEach(function (form) {
+        form.addEventListener("submit", function () {
+            document.getElementById("loading-overlay").style.display = "flex";
         });
     });
+});
+
+    // Improve loading spinner behavior
+$(document).ready(function() {
+    // Hide loading overlay when page is ready
+    $("#loading-overlay").hide();
+
+    // Show loading overlay on form submit
+    $("#bookingForm").on("submit", function() {
+        if ($(this).valid()) {  // Only show if form is valid
+            $("#loading-overlay").show();
+        }
+    });
+
+    // Add form validation
+    $("#bookingForm").validate({
+        errorElement: 'div',
+        errorClass: 'invalid-feedback',
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+        },
+        errorPlacement: function(error, element) {
+            error.insertAfter(element);
+        }
+    });
+
+    // Close alert automatically after 5 seconds
+    setTimeout(function() {
+        $(".alert").alert('close');
+    }, 5000);
+});
 </script>
 </body>
 </html>

@@ -32,5 +32,13 @@ public class QueryUtil {
     public static final String FIND_VEHICLE_BY_ID = "SELECT * FROM vehicles WHERE id = ?";
     public static final String FIND_ALL_VEHICLES_BY_STATUS = "SELECT * FROM vehicles where status=?";
 
+    // BOOKING
+    public static final String FIND_ALL_BOOKINGS = "SELECT * FROM Transaction";
+    public static final String FIND_BOOKING_BY_ID = "SELECT * FROM Transaction WHERE id = ?";
+    public static final String FIND_LAST_BOOKING_ID = "SELECT id FROM Transaction ORDER BY id DESC LIMIT 1";
+    public static final String FIND_TODAY_BOOKING_COUNT = "SELECT COUNT(*) AS today_count FROM Transaction WHERE DATE(createdAt) = CURRENT_DATE;";
+    public static final String SAVE_BOOKING = "INSERT INTO Transaction (id, driverId, customerId, vehicleId, estMileage, rentalType, total, additionalFee, discountFee, startDate, endDate, customerName, driverName, vehiclePlate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static final String UPDATE_BOOKING = "UPDATE Transaction SET status=?  WHERE id = ?";
+
 
 }

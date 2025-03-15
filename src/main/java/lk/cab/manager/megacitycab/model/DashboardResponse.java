@@ -1,10 +1,15 @@
 package lk.cab.manager.megacitycab.model;
 
+import lk.cab.manager.megacitycab.entity.Transaction;
+
+import java.util.List;
+
 public class DashboardResponse {
     private String totalCustomers;
     private String availableDrivers;
     private String availableVehicles;
     private String todayBookings;
+    private List<Transaction> bookings;
 
     public DashboardResponse() {
     }
@@ -14,6 +19,14 @@ public class DashboardResponse {
         this.availableDrivers = availableDrivers;
         this.availableVehicles = availableVehicles;
         this.todayBookings = todayBookings;
+    }
+
+    public DashboardResponse(String totalCustomers, String availableDrivers, String availableVehicles, String todayBookings, List<Transaction> bookings) {
+        this.totalCustomers = totalCustomers;
+        this.availableDrivers = availableDrivers;
+        this.availableVehicles = availableVehicles;
+        this.todayBookings = todayBookings;
+        this.bookings = bookings;
     }
 
     public String getTotalCustomers() {
@@ -46,5 +59,13 @@ public class DashboardResponse {
 
     public void setTodayBookings(String todayBookings) {
         this.todayBookings = todayBookings;
+    }
+
+    public List<Transaction> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Transaction> bookings) {
+        this.bookings = bookings;
     }
 }
