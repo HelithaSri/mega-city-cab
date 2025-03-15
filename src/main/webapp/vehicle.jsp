@@ -106,13 +106,13 @@
                         <div class="form-group">
                             <label for="status" class="form-label">Status</label>
                             <select id="status" name="status" class="form-control" required>
-                                <option value="Available" <%= isEditMode && vehicleToEdit.getStatus().equals("available") ? "selected" : "" %>>
+                                <option value="Available" <%= isEditMode && vehicleToEdit.getStatus().equalsIgnoreCase("available") ? "selected" : "" %>>
                                     Available
                                 </option>
-                                <option value="Rented" <%= isEditMode && vehicleToEdit.getStatus().equals("rented") ? "selected" : "" %>>
+                                <option value="Rented" <%= isEditMode && vehicleToEdit.getStatus().equalsIgnoreCase("rented") ? "selected" : "" %>>
                                     Rented
                                 </option>
-                                <option value="Maintenance" <%= isEditMode && vehicleToEdit.getStatus().equals("maintenance") ? "selected" : "" %>>
+                                <option value="Maintenance" <%= isEditMode && vehicleToEdit.getStatus().equalsIgnoreCase("maintenance") ? "selected" : "" %>>
                                     Maintenance
                                 </option>
                             </select>
@@ -209,7 +209,7 @@
                         </td>
                         <td><%= vehicle.getExtraMileageFee() %>
                         <td><span
-                                class="badge badge-<%= vehicle.getStatus().equals("Available") ? "success" : vehicle.getStatus().equalsIgnoreCase("Rented") ? "pending" : vehicle.getStatus().equals("Maintenance") ? "danger" : "" %>"><%= vehicle.getStatus() %></span>
+                                class="badge badge-<%= vehicle.getStatus().equalsIgnoreCase("Available") ? "success" : vehicle.getStatus().equalsIgnoreCase("Rented") ? "pending" : vehicle.getStatus().equalsIgnoreCase("Maintenance") ? "danger" : "" %>"><%= vehicle.getStatus() %></span>
                         </td>
                         <td class="action-links">
                             <a href="javascript:void(0)" class="edit-link"
