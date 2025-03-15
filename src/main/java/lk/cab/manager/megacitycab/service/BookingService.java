@@ -96,7 +96,7 @@ public class BookingService {
                 return false;
             }
 
-            LOGGER.log(Level.INFO, () -> "Booking Details: " + booking.toString());
+            LOGGER.log(Level.INFO, () -> "Booking Details: " + booking);
 
 
             Driver driver = driverRepository.findById(booking.getDriverId());
@@ -113,7 +113,7 @@ public class BookingService {
 
             vehicle.setStatus(VehicleStatus.AVAILABLE.name());
             driver.setAvailability(true);
-            booking.setStatus(BookingStatus.CANCEL.name());
+            booking.setStatus(BookingStatus.CANCELED.name());
 
             vehicleRepository.update(vehicle);
             driverRepository.update(driver);
@@ -152,7 +152,7 @@ public class BookingService {
 
             vehicle.setStatus(VehicleStatus.AVAILABLE.name());
             driver.setAvailability(true);
-            booking.setStatus(BookingStatus.COMPLETE.name());
+            booking.setStatus(BookingStatus.COMPLETED.name());
 
             vehicleRepository.update(vehicle);
             driverRepository.update(driver);
