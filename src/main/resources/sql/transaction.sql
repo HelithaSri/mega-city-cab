@@ -4,7 +4,7 @@ CREATE TABLE Transaction
     driverId      VARCHAR(36)    NOT NULL,
     customerId    VARCHAR(36)    NOT NULL,
     vehicleId     VARCHAR(36)    NOT NULL,
-    status        VARCHAR(50) DEFAULT 'Ongoing',
+    status        VARCHAR(50) DEFAULT 'ONGOING',
     estMileage    DECIMAL(10, 2),
     rentalType    VARCHAR(150),
     total         DECIMAL(10, 2) NOT NULL,
