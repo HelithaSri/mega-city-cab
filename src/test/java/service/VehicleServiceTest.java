@@ -7,12 +7,11 @@ import lk.cab.manager.megacitycab.repository.VehicleRepository;
 import lk.cab.manager.megacitycab.service.VehicleService;
 import lk.cab.manager.megacitycab.util.IdGenerator;
 import lk.cab.manager.megacitycab.util.QueryUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -34,13 +33,14 @@ class VehicleServiceTest {
 
     private VehicleDto vehicleDto;
     private Vehicle vehicle;
+    private MockedStatic<IdGenerator> mockedIdGenerator;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         vehicleDto = new VehicleDto(
-                "V001",
+                "V0001",
                 "Toyota",
                 "Corolla",
                 2022,
@@ -56,7 +56,7 @@ class VehicleServiceTest {
         );
 
         vehicle = new Vehicle(
-                "V001",
+                "V0001",
                 "Toyota",
                 "Corolla",
                 2022,
@@ -69,6 +69,13 @@ class VehicleServiceTest {
                 new BigDecimal("10.0"),
                 "Available"
         );
+
+        mockedIdGenerator = Mockito.mockStatic(IdGenerator.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        mockedIdGenerator.close();  // Ensure static mock is deregistered
     }
 
     @Test
@@ -87,8 +94,10 @@ class VehicleServiceTest {
 
     @Test
     void testAddVehicle() throws SQLException {
-        mockStatic(IdGenerator.class);
-        when(IdGenerator.generateNextId(QueryUtil.FIND_LAST_VEHICLE_ID, "V")).thenReturn("V002");
+//        mockStatic(IdGenerator.class);
+        mockedIdGenerator.when(() -> IdGenerator.generateNextId(anyString(), anyString()))
+                .thenReturn("V0002");
+//        when(IdGenerator.generateNextId(QueryUtil.FIND_LAST_VEHICLE_ID, "V")).thenReturn("V0002");
 
         doNothing().when(vehicleRepository).save(any(Vehicle.class));
 
@@ -118,12 +127,12 @@ class VehicleServiceTest {
 
     @Test
     void testDeleteVehicle_WhenVehicleExists() throws SQLException {
-        when(vehicleRepository.findById("V001")).thenReturn(vehicle);
-        when(vehicleRepository.delete("V001")).thenReturn(true);
+        when(vehicleRepository.findById("V0001")).thenReturn(vehicle);
+        when(vehicleRepository.delete("V0001")).thenReturn(true);
 
-        assertDoesNotThrow(() -> vehicleService.deleteVehicle("V001"));
+        assertDoesNotThrow(() -> vehicleService.deleteVehicle("V0001"));
 
-        verify(vehicleRepository, times(1)).delete("V001");
+        verify(vehicleRepository, times(1)).delete("V0001");
     }
 
     @Test

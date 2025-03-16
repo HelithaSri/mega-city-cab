@@ -6,12 +6,11 @@ import lk.cab.manager.megacitycab.repository.CustomerRepository;
 import lk.cab.manager.megacitycab.service.CustomerService;
 import lk.cab.manager.megacitycab.util.IdGenerator;
 import lk.cab.manager.megacitycab.util.QueryUtil;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
@@ -37,6 +36,9 @@ class CustomerServiceTest {
     private CustomerDto customerDto;
     private Customer customer;
 
+    private MockedStatic<IdGenerator> mockedIdGenerator;
+
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -61,13 +63,23 @@ class CustomerServiceTest {
                 "johndoe@example.com",
                 LocalDate.parse("1990-01-01")
         );
+
+        mockedIdGenerator = Mockito.mockStatic(IdGenerator.class);
+
+    }
+
+    @AfterEach
+    void tearDown() {
+        mockedIdGenerator.close();  // Ensure static mock is deregistered
     }
 
     @Test
     void testAddCustomer() throws SQLException {
 
-        mockStatic(IdGenerator.class);
-        when(IdGenerator.generateNextId(QueryUtil.FIND_LAST_CUSTOMER_ID, "c")).thenReturn("c002");
+//        mockStatic(IdGenerator.class);
+//        when(IdGenerator.generateNextId(QueryUtil.FIND_LAST_CUSTOMER_ID, "c")).thenReturn("c002");
+        mockedIdGenerator.when(() -> IdGenerator.generateNextId(anyString(), eq("C")))
+                .thenReturn("C0002");
 
         when(customerRepository.save(any(Customer.class))).thenReturn(true);
 
